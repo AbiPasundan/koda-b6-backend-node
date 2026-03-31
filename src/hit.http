@@ -1,0 +1,120 @@
+# contoh penggunaan variable di http
+# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWF
+# POST http://localhost:3000/users 
+# Content-Type: application/json
+# Authorization: Bearer {{$token}}
+
+# {
+#   "email": "juiceflavour@mail.com",
+#   "password":   "10000"
+# }
+
+###
+POST http://localhost:3000/users 
+Content-Type: application/json
+Authorization: Bearer {{$token}}
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "gitinit@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
+###
+
+POST http://localhost:3000/users 
+Content-Type: application/json
+
+{
+  "email": "juiceflavour@mail.com",
+  "password":   "10000"
+}
