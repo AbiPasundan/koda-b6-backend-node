@@ -9,12 +9,12 @@ import * as userModel from "../models/users.models.js"
 // users?page=1&limit=5
 
 export async function getAllUsers(req, res) {
+    const { rows } = await userModel.getAllUsers()
+
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 5
     const offset = (page - 1) * limit
-
-    const allUsers = await userModel.getAllUsers()
-    const users = allUsers.slice(offset, offset + limit)
+    const users = rows.slice(offset, offset + limit)
 
     return res.json({
         success: true,
@@ -46,7 +46,7 @@ export async function createUser(req, res) {
  */
 
 export async function getUserById(req, res) {
-    const {id: idStr} = req.params
+    const { id: idStr } = req.params
     const id = parseInt(idStr)
     const data = await userModel.getUserById(id)
     try {
@@ -110,4 +110,5 @@ export async function deleteUser(req, res) {
             message: error.message,
             result: null
         })
-}}
+    }
+}

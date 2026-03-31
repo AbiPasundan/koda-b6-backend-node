@@ -10,6 +10,10 @@
 # }
 
 ###
+
+GET http://localhost:3000/users
+
+###
 POST http://localhost:3000/users 
 Content-Type: application/json
 Authorization: Bearer {{$token}}
@@ -21,100 +25,3 @@ Authorization: Bearer {{$token}}
 
 ###
 
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "gitinit@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}
-###
-
-POST http://localhost:3000/users 
-Content-Type: application/json
-
-{
-  "email": "juiceflavour@mail.com",
-  "password":   "10000"
-}

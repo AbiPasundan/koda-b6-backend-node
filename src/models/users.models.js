@@ -1,3 +1,4 @@
+import { db } from "../lib/db.js"
 
 /**
  * @typedef {Object} User
@@ -6,9 +7,17 @@
  * @property {string} password
 */
 
+
+
+const  query = async (text, params) => {
+    const dbs = await db()
+    return dbs.query(text, params)
+}
+
 /**
  * @type {User[]}
 */
+
 const userData = [
     {
         "id": 1,
@@ -70,7 +79,10 @@ function findUserIndex(id) {
 }
 
 export async function getAllUsers() {
-    return userData
+    const test = await query("SELECT * FROM users")
+    console.log(test);
+
+    return test
 }
 
 export async function getUserById(id) {
@@ -87,13 +99,39 @@ export async function getUserById(id) {
  * @param {User} data
 */
 export async function createUser(data) {
-    const id = incrementasId++
-    userData.push({
-        id,
+    const existingUser = userData.find(user => user.email === data.email)
+    if (existingUser) {
+        throw new Error("User already exists")
+    }
+
+    const newUser = {
+        id: incrementasId++,
         ...data
-    })
-    return data
+    }
+    userData.push(newUser)
+    return newUser
 }
+
+// /**
+//  * 
+//  * @param {User} data
+//  * @param {function} data
+// */
+
+export async function getUserByEmail(email, cb) {
+    const found = userData.filter(user => user.email === email)
+    if (found.length === 1) {
+        return found[0]
+    } else {
+        if (cb) {
+            return cb(found[0], null)
+        } else {
+            throw new Error("User not found")
+            // throw new Error("User not found")
+        }
+    }
+}
+
 /**
  * 
  * @param {number} id
