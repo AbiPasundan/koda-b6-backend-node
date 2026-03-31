@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/main.js",
   "scripts": {
-    "node": "node --watch src/main.js",
+    "node": "node --env-file=.env --watch src/main.js",
     "start": "node --watch src/main.js",
     
     "test": "echo \"Error: no test specified\" && exit 1"

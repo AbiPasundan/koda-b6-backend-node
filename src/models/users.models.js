@@ -113,7 +113,7 @@ export async function deleteUser(id) {
     const found = findUserIndex(id)
     const user = userData[found]
     if (found !== -1) {
-        delete userData[found]
+        userData.splice(found, 1)
         return user
     } else {
         throw new Error("User not found")
