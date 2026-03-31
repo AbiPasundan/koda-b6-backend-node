@@ -6,9 +6,17 @@ import * as userModel from "../models/users.models.js"
  * @param {import("express").Response} res 
  */
 
+// users?page=1&limit=5
+
 export async function getAllUsers(req, res) {
-    const users = await userModel.getAllUsers()
-    res.json({
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 5
+    const offset = (page - 1) * limit
+
+    const allUsers = await userModel.getAllUsers()
+    const users = allUsers.slice(offset, offset + limit)
+
+    return res.json({
         success: true,
         message: "All users",
         result: users
