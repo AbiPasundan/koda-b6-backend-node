@@ -35,3 +35,13 @@ export async function getProductById(req, res) {
         })
     }
 }
+
+export async function createProduct(req, res) {
+    const data = req.body
+    const product = await productsModel.createProducts(data)
+    res.status(201).json({
+        success: true,
+        message: "Product created",
+        result: product
+    })
+}

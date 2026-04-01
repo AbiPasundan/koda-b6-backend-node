@@ -20,3 +20,18 @@ export async function getProductById(id) {
         throw new Error("Product not found")
     }
 }
+
+export async function createProducts(data) {
+    const queryInsert = `INSERT INTO products (product_name, product_desc, price, quantity, discount) VALUES ($1, $2, $3, $4, $5)`
+
+    const val = [
+        data.product_name,
+        data.product_desc,
+        data.price,
+        data.quantity,
+        data.discount,
+    ]
+
+    const newProduct = await query(queryInsert, val)
+    return newProduct.rows[0];
+}
