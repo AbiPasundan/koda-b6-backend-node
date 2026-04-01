@@ -6,7 +6,7 @@ const query = async (text, params) => {
 }
 
 export async function recomendedProduct() {
-    const query = `
+    const queryRecomendedProduct = `
         SELECT
             p.id,
             p.product_name,
@@ -20,7 +20,7 @@ export async function recomendedProduct() {
         WHERE p.id > 5
         LIMIT 4;
     `
-    const rekomendedProduct = await query(query)
+    const rekomendedProduct = await query(queryRecomendedProduct)
 
     return rekomendedProduct
 }
