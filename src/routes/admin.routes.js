@@ -31,6 +31,32 @@ const adminRouter = Router()
  *         description: Bad request
  *       500:
  *         description: Internal server error
+ *   post:
+ *     tags:
+ *       - admin
+ *     summary: Create a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               full_name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       201:
+ *         description: User created
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  * /admin/users/{id}:
  *   get:
  *     tags:
