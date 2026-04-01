@@ -50,7 +50,7 @@ export async function createUser(data) {
         data.full_name,
         data.email,
         data.password,
-        data.role_id || 2,
+        2,
     ]
 
     const newUser = await query(queryRegister, val)
