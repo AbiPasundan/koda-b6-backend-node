@@ -1,9 +1,10 @@
 import { Router } from "express";
 
-import { getBrowseController } from "#/controllers/browseProduct.controller.js";
+import { getBrowseController, getDetailProductController } from "#/controllers/browseProduct.controller.js";
 
 const browseControllerRoutes = Router()
 
-browseControllerRoutes.get("", getBrowseController)
+browseControllerRoutes.get("/browseproducts", getBrowseController)
+browseControllerRoutes.get("/detailproduct/:id", getDetailProductController)
 
 export default browseControllerRoutes;

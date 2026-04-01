@@ -10,6 +10,6 @@ const publicRouter = Router()
 publicRouter.use("/test", userRouter)
 publicRouter.use("/auth", authRouter)
 publicRouter.use("/products", recomendedProductRoutes)
-publicRouter.use("/browseproducts", browseControllerRoutes)
+publicRouter.use("/", browseControllerRoutes)
 
 export default publicRouter
