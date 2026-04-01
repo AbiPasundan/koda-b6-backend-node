@@ -9,7 +9,7 @@ import { db } from "../lib/db.js"
 
 
 
-const  query = async (text, params) => {
+const query = async (text, params) => {
     const dbs = await db()
     return dbs.query(text, params)
 }
@@ -119,6 +119,12 @@ export async function createUser(data) {
 // */
 
 export async function getUserByEmail(email, cb) {
+    // const found = userData.find(user => user.email === email)
+    // if (found) {
+    //     cb(found)
+    // } else {
+    //     throw new Error("User not found")
+    // }
     const found = userData.filter(user => user.email === email)
     if (found.length === 1) {
         return found[0]
@@ -127,9 +133,9 @@ export async function getUserByEmail(email, cb) {
             return cb(found[0], null)
         } else {
             throw new Error("User not found")
-            // throw new Error("User not found")
         }
     }
+
 }
 
 /**

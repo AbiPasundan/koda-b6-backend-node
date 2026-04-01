@@ -1,3 +1,4 @@
+import { generateToken } from "../lib/jwt.js"
 import * as userModel from "../models/users.models.js"
 
 /**
@@ -20,10 +21,12 @@ export async function login(req, res) {
     try {
         const user = await userModel.getUserByEmail(email)
         if (user.password === password) {
+            const token = generateToken({userId: user.id})
+            user.token = token
             res.status(200).json({
                 success: true,
                 message: "Login successfull",
-                result: user
+                result: token
             })
         } else {
             throw new Error("Invalid password")
