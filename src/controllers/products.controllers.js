@@ -15,3 +15,23 @@ export async function getAllProducts(req, res) {
         result: users
     })
 }
+
+
+export async function getProductById(req, res) {
+    const { id: idStr } = req.params
+    const id = parseInt(idStr)
+    const data = await productsModel.getProductById(id)
+    try {
+        res.status(200).json({
+            success: true,
+            message: "Product found",
+            result: data
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "Product not found",
+            result: error.message
+        })
+    }
+}

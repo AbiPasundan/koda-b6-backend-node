@@ -11,3 +11,12 @@ export async function getAllProducts() {
 
     return getProducts
 }
+
+export async function getProductById(id) {
+    const result = await query("SELECT * FROM products WHERE id = $1", [id])
+    if (result.rows.length === 1) {
+        return result.rows[0]
+    } else {
+        throw new Error("Product not found")
+    }
+}
