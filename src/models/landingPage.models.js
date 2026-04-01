@@ -24,3 +24,20 @@ export async function recomendedProductModels() {
 
     return rekomendedProduct
 }
+
+export async function testimoniModels() {
+    const queryTestimoniModels = `
+        SELECT
+            users.full_name,
+            users.pictures,
+            reviews.messages,
+            reviews.ratings
+        FROM reviews
+        INNER JOIN users ON users.id = reviews.user_id
+        WHERE reviews.ratings >= 4
+        LIMIT 3;
+    `
+    const testimoniProduct = await query(queryTestimoniModels)
+
+    return testimoniProduct
+}
