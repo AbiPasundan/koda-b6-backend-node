@@ -79,10 +79,9 @@ function findUserIndex(id) {
 }
 
 export async function getAllUsers() {
-    const test = await query("SELECT * FROM users")
-    console.log(test);
+    const getAllUsers = await query("SELECT * FROM users")
 
-    return test
+    return getAllUsers
 }
 
 export async function getUserById(id) {
@@ -99,17 +98,23 @@ export async function getUserById(id) {
  * @param {User} data
 */
 export async function createUser(data) {
-    const existingUser = userData.find(user => user.email === data.email)
-    if (existingUser) {
-        throw new Error("User already exists")
+    const register = await query("SELECT * FROM users WHERE email = $1", [data.email]);
+
+    if(register.rows.length > 0){
+        throw new Error("Email already registered");
     }
 
-    const newUser = {
-        id: incrementasId++,
-        ...data
-    }
-    userData.push(newUser)
-    return newUser
+    const queryRegister = `INSERT INTO users (full_name, email, password, role_id) VALUES ($1, $2, $3, $4)`
+
+    const val = [
+        data.full_name,
+        data.email,
+        data.password,
+        data.role_id || 2,
+    ]
+
+    const newUser = await query(queryRegister, val)
+    return newUser.rows[0];
 }
 
 // /**
