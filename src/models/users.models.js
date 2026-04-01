@@ -159,11 +159,9 @@ export async function updateUser(id, data) {
 }
 
 export async function deleteUser(id) {
-    const found = findUserIndex(id)
-    const user = userData[found]
-    if (found !== -1) {
-        userData.splice(found, 1)
-        return user
+    const result = await query("DELETE FROM users WHERE id = $1 RETURNING *", [id])
+    if (result.rows.length === 1) {
+        return result.rows[0]
     } else {
         throw new Error("User not found")
     }
