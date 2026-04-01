@@ -9,6 +9,34 @@ const publicRouter = Router()
 
 publicRouter.use("/test", userRouter)
 publicRouter.use("/auth", authRouter)
+
+/**
+ * 
+ * @openapi
+ * /products/home:
+ *   get:
+ *     tags:
+ *       - Landing Page
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ * /products/reviews:
+ *   get:
+ *     tags:
+ *       - Landing Page
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ * 
+*/
 publicRouter.use("/products", recomendedProductRoutes)
 publicRouter.use("/", browseControllerRoutes)
 
