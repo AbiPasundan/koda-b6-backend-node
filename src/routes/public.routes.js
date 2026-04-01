@@ -8,6 +8,64 @@ import browseControllerRoutes from "./public/browseProduct.routes.js";
 const publicRouter = Router()
 
 publicRouter.use("/test", userRouter)
+/**
+ * @openapi
+ * /auth/login:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Login user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ * /auth/register:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Register a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - full_name
+ *               - email
+ *               - password
+ *             properties:
+ *               full_name:
+ *                 type: string
+ *                 format: email
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       201:
+ *         description: User created successfully
+*/
+
 publicRouter.use("/auth", authRouter)
 
 /**
