@@ -10,7 +10,7 @@ const adminRouter = Router()
  * /admin/users:
  *   get:
  *     tags:
- *       - admin
+ *       - Admin Users CRUD
  *     parameters:
  *       - in: query
  *         name: page
@@ -33,7 +33,7 @@ const adminRouter = Router()
  *         description: Internal server error
  *   post:
  *     tags:
- *       - admin
+ *       - Admin Users CRUD
  *     summary: Create a new user
  *     requestBody:
  *       required: true
@@ -60,7 +60,7 @@ const adminRouter = Router()
  * /admin/users/{id}:
  *   get:
  *     tags:
- *       - admin
+ *       - Admin Users CRUD
  *     parameters:
  *       - in: path
  *         name: id
@@ -75,9 +75,45 @@ const adminRouter = Router()
  *         description: Bad request
  *       500:
  *         description: Internal server error
+ *   patch:
+ *     tags:
+ *       - Admin Users CRUD
+ *     summary: Update a user's details
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: User Id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               full_name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *             description: User data to update (at least one field is typically provided)
+ *     responses:
+ *       200:
+ *         description: User updated
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
  *   delete:
  *     tags:
- *       - admin
+ *       - Admin Users CRUD
  *     parameters:
  *       - in: path
  *         name: id
@@ -101,7 +137,7 @@ adminRouter.use("/admin", userRouter)
  * /admin/products:
  *   get:
  *     tags:
- *       - admin
+ *       - Admin Product CRUD
  *     parameters:
  *       - in: query
  *         name: page
