@@ -5,7 +5,7 @@ const query = async (text, params) => {
     return dbs.query(text, params)
 }
 
-export async function recomendedProduct() {
+export async function recomendedProductModels() {
     const queryRecomendedProduct = `
         SELECT
             p.id,
