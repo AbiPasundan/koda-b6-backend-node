@@ -45,3 +45,23 @@ export async function createProduct(req, res) {
         result: product
     })
 }
+
+// 
+
+export async function deleteProduct(req, res) {
+    try {
+        const id = parseInt(req.params.id)
+        const product = await productsModel.deleteProduct(id)
+        res.json({
+            success: true,
+            message: "Product Deleted",
+            result: product
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: error.message,
+            result: null
+        })
+    }
+}

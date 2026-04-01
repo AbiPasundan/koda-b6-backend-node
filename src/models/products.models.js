@@ -35,3 +35,14 @@ export async function createProducts(data) {
     const newProduct = await query(queryInsert, val)
     return newProduct.rows[0];
 }
+
+// 
+
+export async function deleteProduct(id) {
+    const result = await query("DELETE FROM products WHERE id = $1 RETURNING *", [id])
+    if (result.rows.length === 1) {
+        return result.rows[0]
+    } else {
+        throw new Error("Product not found")
+    }
+}
