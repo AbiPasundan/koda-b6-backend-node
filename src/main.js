@@ -5,7 +5,6 @@ import publicRouter from "#/routes/public.routes.js"
 import adminRouter from "#/routes/admin.routes.js"
 import auth from "./middleware/auth.middleware.js"
 import docsRouter from "./routes/docs.routes.js"
-import recomendedProductRoutes from "./routes/landingPage.routes.js"
 
 const app = express()
 

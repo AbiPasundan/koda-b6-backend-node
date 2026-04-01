@@ -1,6 +1,5 @@
 import { Router } from "express";
-import userRouter from "#/routes/users.routes.js";
-import auth from "../middleware/auth.middleware.js";
+import userRouter from "#/routes/admin/users.routes.js";
 
 const adminRouter = Router()
 
