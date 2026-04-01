@@ -1,4 +1,5 @@
-import { GenerateHash } from "../lib/hash.js"
+import { constants } from "node:http2"
+import { GenerateHash, VerifyHash } from "#/lib/hash.js"
 import { generateToken } from "../lib/jwt.js"
 import * as userModel from "../models/users.models.js"
 
@@ -16,22 +17,40 @@ export async function login(req, res) {
             result: null
         })
     }
-    
+
     const { email, password } = req.body
 
     try {
         const user = await userModel.getUserByEmail(email)
-        if (user.password === password) {
-            const token = generateToken({userId: user.id})
-            user.token = token
-            res.status(200).json({
-                success: true,
-                message: "Login successfull",
-                result: token
+
+        if (!user) {
+            return res.status(constants.HTTP_STATUS_UNAUTHORIZED).json({
+                success: false,
+                message: "Invalid email or password"
             })
-        } else {
-            throw new Error("Invalid password")
         }
+
+        const isValid = await VerifyHash(user.password, password)
+
+        if (!isValid) {
+            return res.status(constants.HTTP_STATUS_UNAUTHORIZED).json({
+                success: false,
+                message: "Invalid email or password"
+            })
+        }
+
+        const token = generateToken({ id: user.id_user })
+
+        const { password: _, ...userWithoutPassword } = user
+
+        res.status(constants.HTTP_STATUS_OK).json({
+            success: true,
+            message: "Login successful",
+            data: {
+                ...userWithoutPassword,
+                token
+            }
+        })
     } catch (error) {
         res.status(404).json({
             success: false,
