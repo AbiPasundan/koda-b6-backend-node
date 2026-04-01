@@ -1,3 +1,4 @@
+import { GenerateHash } from "../lib/hash.js"
 import * as userModel from "../models/users.models.js"
 
 /**
@@ -31,6 +32,11 @@ export async function getAllUsers(req, res) {
 
 export async function createUser(req, res) {
     const data = req.body
+    if (data.password) {
+        // const { GenerateHash } = await import("../lib/hash.js")
+        data.password = await GenerateHash(data.password)
+        console.log(data.password);
+    }
     const user = await userModel.createUser(data)
     res.status(201).json({
         success: true,

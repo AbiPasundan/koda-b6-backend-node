@@ -1,3 +1,4 @@
+import { GenerateHash } from "../lib/hash.js"
 import { generateToken } from "../lib/jwt.js"
 import * as userModel from "../models/users.models.js"
 
@@ -47,6 +48,9 @@ export async function login(req, res) {
 */
 export async function register(req, res) {
     const data = req.body
+    if (data.password) {
+        data.password = await GenerateHash(data.password)
+    }
     const user = await userModel.createUser(data)
 
     res.json({
@@ -54,9 +58,9 @@ export async function register(req, res) {
         message: "User created",
         result: user
     })
-    res.status(400).json({
-        success: false,
-        message: error.message,
-        result: null
-    })
+    // res.status(400).json({
+    //     success: false,
+    //     message: "error.message",
+    //     result: null
+    // })
 }

@@ -4,6 +4,6 @@ import auth from "../middleware/auth.middleware.js";
 
 const adminRouter = Router()
 
-adminRouter.use("/admin", auth, userRouter)
+adminRouter.use("/admin", userRouter)
 
 export default adminRouter
