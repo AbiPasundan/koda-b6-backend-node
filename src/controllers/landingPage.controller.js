@@ -5,7 +5,17 @@ export async function getRecomendedProductController(req, res) {
 
     return res.json({
         success: true,
-        message: "All users",
+        message: "All Product",
+        result: rows
+    })
+}
+
+export async function getTestimoniController(req, res) {
+    const { rows } = await recomendedProduct.testimoniModels()
+
+    return res.json({
+        success: true,
+        message: "All Testimoni",
         result: rows
     })
 }
