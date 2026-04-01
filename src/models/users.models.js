@@ -85,9 +85,9 @@ export async function getAllUsers() {
 }
 
 export async function getUserById(id) {
-    const found = userData.filter(user => user.id === id)
-    if (found.length === 1) {
-        return found[0]
+    const result = await query("SELECT * FROM users WHERE id = $1", [id])
+    if (result.rows.length === 1) {
+        return result.rows[0]
     } else {
         throw new Error("User not found")
     }
