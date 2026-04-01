@@ -31,6 +31,41 @@ const adminRouter = Router()
  *         description: Bad request
  *       500:
  *         description: Internal server error
+ * /admin/users/{id}:
+ *   get:
+ *     tags:
+ *       - admin
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: User Id
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ *   delete:
+ *     tags:
+ *       - admin
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: User Id
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  * 
 */
 adminRouter.use("/admin", userRouter)
