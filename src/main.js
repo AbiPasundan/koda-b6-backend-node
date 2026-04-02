@@ -1,19 +1,12 @@
 
 import express from "express"
-
-import publicRouter from "#/routes/public.routes.js"
-import adminRouter from "#/routes/admin.routes.js"
-import auth from "./middleware/auth.middleware.js"
-import docsRouter from "./routes/docs.routes.js"
+import mainRouter from "./routes/main.routes.js"
 
 const app = express()
 
 app.use(express.json())
-app.use("", adminRouter)
-app.use("", publicRouter)
-app.use("", docsRouter)
-// testing
-// app.use("", recomendedProductRoutes)
+
+app.use("", mainRouter)
 
 const PORT = process.env.PORT || 3001
 
