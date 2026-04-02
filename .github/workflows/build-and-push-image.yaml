@@ -1,0 +1,20 @@
+name: Build and Push to GitHub Actions 🚀🚀🚀🚀🚀🚀🚀🚀🚀
+run-name: ${{ github.event.head_commit.message }}
+on:
+    push:
+        tags:
+            - v*
+jobs:
+    Explore-GitHub-Actions:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out repository code
+              uses: actions/checkout@v5
+            - name: Login to docker ghcr.io
+              run: docker build . -t ghcr.io/${{ github.repository }} # pkonamah link ghcr we
+            - name: Login to docker ghcr.io
+              run: |
+                  echo ${{github.token}} docker login ghcr.io --username ${{github.repository_owner}}
+            - name: login to ghcr
+              run: |
+                docker push ghcr.io/${{ github.repository }}:latest
