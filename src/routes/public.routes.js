@@ -2,6 +2,7 @@ import { Router } from "express";
 import authRouter from "#/routes/public/auth.routes.js";
 import recomendedProductRoutes from "#/routes/public/landingPage.routes.js";
 import browseControllerRoutes from "./public/browseProduct.routes.js";
+import userRoutes from "./users/users.routes.js";
 
 const publicRouter = Router()
 
@@ -130,5 +131,7 @@ publicRouter.use("/products", recomendedProductRoutes)
  * 
 */
 publicRouter.use("/", browseControllerRoutes)
+
+publicRouter.use("/", userRoutes)
 
 export default publicRouter
