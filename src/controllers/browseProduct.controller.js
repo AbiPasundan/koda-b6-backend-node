@@ -46,3 +46,32 @@ export async function getDetailProductController(req, res) {
         });
     }
 }
+
+export async function addToCartController(req, res) {
+    const data = req.body
+    try {
+        const user = await browseProduct.addToCartModels(data)
+        res.status(201).json({
+            success: true,
+            message: "Success Add to cart",
+            result: user
+        })
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message || "Failed to add to cart",
+            result: null
+        })
+    }
+}
+
+// test with this shit
+// {
+// 	"user_id": 1,
+// 	"product_id": 7,
+// 	"quantity": 3,
+// 	"product_name": "euy",
+// 	"base_price": 1000,
+// 	"variant_name": "sweet variant",
+// 	"size_name": "no size"
+// }
