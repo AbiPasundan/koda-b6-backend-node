@@ -108,3 +108,37 @@ export async function addToCartModels(data) {
 		throw error
 	}
 }
+
+export async function getCartModels(id) {
+	// cart_item_id, product_id, product_name, variant_name, size_name, base_price, quantity, discount_rate, normal_price, discount_price, image_path
+	const queryGetCartModels = `
+	SELECT 
+		ci.cart_item_id,
+		ci.product_id,
+		ci.product_name,
+		ci.variant_name,
+		ci.size_name,
+		ci.base_price,
+		ci.quantity,
+		d.discount_rate,
+		(ci.base_price * ci.quantity) AS norma_price,
+		((ci.base_price - (ci.base_price * COALESCE(d.discount_rate, 0) / 100)) * ci.quantity) AS discount_price,
+		pi.path AS image_path
+	FROM 
+		carts c
+	JOIN 
+		cart_items ci ON c.cart_id = ci.cart_id
+	LEFT JOIN 
+		product_images pi ON ci.product_id = pi.product_id
+	JOIN 
+		products p ON ci.product_id = p.id
+	LEFT JOIN 
+		discount d ON p.discount = d.discount_id
+	WHERE 
+		c.user_id = $1;
+	`
+
+	const getCart = await query(queryGetCartModels, [id])
+
+	return getCart
+}
