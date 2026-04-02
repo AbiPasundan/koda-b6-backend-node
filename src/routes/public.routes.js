@@ -132,6 +132,4 @@ publicRouter.use("/products", recomendedProductRoutes)
 */
 publicRouter.use("/", browseControllerRoutes)
 
-publicRouter.use("/", userRoutes)
-
 export default publicRouter
