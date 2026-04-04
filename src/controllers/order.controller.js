@@ -8,10 +8,10 @@ export async function getOrderController(req, res) {
 
     const token = authHeader && authHeader.split(' ')[1];
     const decode = jwt.decode(token)
-    const {id} = decode
+    const { id } = decode
     console.log(decode);
     console.log(id);
-    
+
 
     const { rows } = await orderModel.getOrdersModels(id)
 
@@ -28,4 +28,24 @@ export async function getOrderController(req, res) {
 }
 
 export async function checkoutCartController(req, res) {
+    const authHeader = req.headers['authorization'];
+
+    const token = authHeader && authHeader.split(' ')[1];
+    const decode = jwt.decode(token)
+    const { id } = decode
+
+    try {
+        const result = await orderModel.checkoutCartModels(id)
+        res.json({
+            success: true,
+            message: "Success Checkout",
+            result: result
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: error.message,
+            result: null
+        })
+    }
 }
