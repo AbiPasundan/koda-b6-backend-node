@@ -5,10 +5,10 @@ const query = async (text, params) => {
     return dbs.query(text, params)
 }
 
-export async function getOrdersModels() {
-    const queryGetOrderModels = `select orders.user_id, orders.status, orders.total, orders.image_path, orders.created_at from orders;`
+export async function getOrdersModels(id) {
+    const queryGetOrderModels = `select orders.user_id, orders.status, orders.total, orders.image_path, orders.created_at from orders where user_id = $1;`
 
-    const getOrder = await query(queryGetOrderModels)
+    const getOrder = await query(queryGetOrderModels, [id])
 
     return getOrder
 }

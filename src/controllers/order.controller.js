@@ -1,9 +1,19 @@
 import { constants } from "node:http2"
 import * as orderModel from "#/models/order.models.js"
+import jwt from "jsonwebtoken";
 
 
 export async function getOrderController(req, res) {
-    const { rows } = await orderModel.getOrdersModels()
+    const authHeader = req.headers['authorization'];
+
+    const token = authHeader && authHeader.split(' ')[1];
+    const decode = jwt.decode(token)
+    const {id} = decode
+    console.log(decode);
+    console.log(id);
+    
+
+    const { rows } = await orderModel.getOrdersModels(id)
 
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 5

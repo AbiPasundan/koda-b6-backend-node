@@ -39,7 +39,12 @@ export async function login(req, res) {
             })
         }
 
-        const token = generateToken({ id: user.id_user })
+        const token = generateToken({ id: user.id, role_id: user.role_id })
+        // console.log(token);
+        // console.log(user);
+        // console.log(user.id);
+        // console.log(user.role_id);
+        
 
         const { password: _, ...userWithoutPassword } = user
 
@@ -52,6 +57,9 @@ export async function login(req, res) {
             }
         })
     } catch (error) {
+        console.log(error);
+        console.log(error.message);
+        
         res.status(404).json({
             success: false,
             message: error.message,

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import userRoutes from "./users/users.routes.js";
+import auth from "#/middleware/auth.middleware.js";
 
 const userRouter = Router()
 
@@ -44,7 +45,6 @@ const userRouter = Router()
  *       400:
  *         description: Failed to add to cart
  */
-// still in testing not implement middleware yet
-userRouter.use("/", userRoutes)
+userRouter.use("/", auth(), userRoutes)
 
 export default userRouter
