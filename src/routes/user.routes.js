@@ -1,5 +1,6 @@
 import { Router } from "express";
 import userRoutes from "./users/users.routes.js";
+import profileRoutes from "./users/profile.routes.js";
 import auth from "#/middleware/auth.middleware.js";
 
 const userRouter = Router()
@@ -46,5 +47,6 @@ const userRouter = Router()
  *         description: Failed to add to cart
  */
 userRouter.use("/", auth(), userRoutes)
+userRouter.use("/", auth(), profileRoutes)
 
 export default userRouter

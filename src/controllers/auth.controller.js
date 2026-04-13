@@ -43,6 +43,7 @@ export async function login(req, res) {
         }
 
         const token = generateToken({ id: user.id, role_id: user.role_id })
+        res.set('Authorization', `Bearer ${token}`);
 
         const { password: _, ...userWithoutPassword } = user
 
