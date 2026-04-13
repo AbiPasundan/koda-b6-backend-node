@@ -2,6 +2,7 @@ import { constants } from "node:http2"
 import { GenerateHash, VerifyHash } from "#/lib/hash.js"
 import { generateToken } from "../lib/jwt.js"
 import * as userModel from "../models/users.models.js"
+import ResponseOk from "#/helper/response.helper.js"
 
 /**
  * 
@@ -40,21 +41,12 @@ export async function login(req, res) {
         }
 
         const token = generateToken({ id: user.id, role_id: user.role_id })
-        // console.log(token);
-        // console.log(user);
-        // console.log(user.id);
-        // console.log(user.role_id);
-        
 
         const { password: _, ...userWithoutPassword } = user
 
-        res.status(constants.HTTP_STATUS_OK).json({
-            success: true,
-            message: "Login successful",
-            data: {
-                ...userWithoutPassword,
-                token
-            }
+        ResponseOk(res, constants.HTTP_STATUS_OK, true, "Login successful", {
+            ...userWithoutPassword,
+            token
         })
     } catch (error) {
         console.log(error);
