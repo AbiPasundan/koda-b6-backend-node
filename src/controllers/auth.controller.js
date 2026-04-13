@@ -1,7 +1,9 @@
+import jwt from "jsonwebtoken"
 import { constants } from "node:http2"
 import { GenerateHash, VerifyHash } from "#/lib/hash.js"
-import { generateToken } from "../lib/jwt.js"
-import * as userModel from "../models/users.models.js"
+import { generateToken } from "#/lib/jwt.js"
+import * as userModel from "#/models/users.models.js"
+import * as forgot_password from "#/models/forgot_password.models.js"
 import ResponseOk, { ResponseErr } from "#/helper/response.helper.js"
 
 /**
@@ -98,3 +100,45 @@ export async function register(req, res) {
         })
     }
 }
+
+export async function requestForgotPasswordController(req, res) {
+    function generateKode() {
+        const char = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let res = '';
+
+        for (let i = 0; i < 4; i++) {
+            const indeksAcak = Math.floor(Math.random() * char.length);
+            res += char[indeksAcak];
+        }
+
+        return res;
+    }
+
+    const authHeader = req.get("Authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized: Token missing",
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    try {
+
+        const _ = await forgot_password.requestForgotPasswordModels(decoded?.id, generateKode());
+
+        return ResponseOk(res, 201, true, "User registered successfully", {});
+
+    } catch (err) {
+        console.error(err);
+        ResponseErr(res, {
+            code: constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
+            message: err.message,
+            errors: constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
+        })
+    }
+}
+

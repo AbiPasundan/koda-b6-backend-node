@@ -9,9 +9,3 @@ productsRouter.post("/products", productsController.createProduct)
 productsRouter.delete("/products/:id", productsController.deleteProduct)
 
 export default productsRouter;
-
-// example
-// userRouter.post("/users", userController.createUser)
-// userRouter.patch("/users/:id", userController.updateUser)
-// userRouter.get("/users/:id", userController.getUserById)
-// userRouter.delete("/users/:id", userController.deleteUser)
