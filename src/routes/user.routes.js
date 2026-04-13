@@ -47,6 +47,50 @@ const userRouter = Router()
  *         description: Failed to add to cart
  */
 userRouter.use("/", auth(), userRoutes)
+
+/**
+ * @openapi
+ * /profile:
+ *   get:
+ *     tags:
+ *       - User Profile
+ *     summary: Get user profile information
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user profile
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ *   put:
+ *     tags:
+ *       - User Profile
+ *     summary: Update user profile
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               full_name:
+ *                 type: string
+ *               phone_number:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully updated user profile
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
 userRouter.use("/", auth(), profileRoutes)
 
 export default userRouter
