@@ -2,7 +2,7 @@ import { constants } from "node:http2"
 import { GenerateHash, VerifyHash } from "#/lib/hash.js"
 import { generateToken } from "../lib/jwt.js"
 import * as userModel from "../models/users.models.js"
-import ResponseOk from "#/helper/response.helper.js"
+import ResponseOk, { ResponseErr } from "#/helper/response.helper.js"
 
 /**
  * 
@@ -12,10 +12,10 @@ import ResponseOk from "#/helper/response.helper.js"
 
 export async function login(req, res) {
     if (!req.body.email || !req.body.password) {
-        return res.status(400).json({
-            success: false,
+        return ResponseErr(res, {
+            code: constants.HTTP_STATUS_BAD_REQUEST,
             message: "Email and password are required",
-            result: null
+            errors: constants.HTTP_STATUS_BAD_REQUEST,
         })
     }
 
@@ -25,18 +25,20 @@ export async function login(req, res) {
         const user = await userModel.getUserByEmail(email)
 
         if (!user) {
-            return res.status(constants.HTTP_STATUS_UNAUTHORIZED).json({
-                success: false,
-                message: "Invalid email or password"
+            return ResponseErr(res, {
+                code: constants.HTTP_STATUS_BAD_REQUEST,
+                message: "User not found",
+                errors: constants.HTTP_STATUS_BAD_REQUEST,
             })
         }
 
         const isValid = await VerifyHash(user.password, password)
 
         if (!isValid) {
-            return res.status(constants.HTTP_STATUS_UNAUTHORIZED).json({
-                success: false,
-                message: "Invalid email or password"
+            return ResponseErr(res, {
+                code: constants.HTTP_STATUS_BAD_REQUEST,
+                message: "Invalid email or password",
+                errors: constants.HTTP_STATUS_BAD_REQUEST,
             })
         }
 
@@ -51,11 +53,11 @@ export async function login(req, res) {
     } catch (error) {
         console.log(error);
         console.log(error.message);
-        
-        res.status(404).json({
-            success: false,
+
+        ResponseErr(res, {
+            code: constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
             message: error.message,
-            result: null
+            errors: constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
         })
     }
 }
@@ -65,21 +67,33 @@ export async function login(req, res) {
  * @param {import("express").Request} req 
  * @param { import("express").Response} res
 */
-export async function register(req, res) {
-    const data = req.body
-    if (data.password) {
-        data.password = await GenerateHash(data.password)
-    }
-    const user = await userModel.createUser(data)
 
-    res.json({
-        success: true,
-        message: "User created",
-        result: user
-    })
-    // res.status(400).json({
-    //     success: false,
-    //     message: "error.message",
-    //     result: null
-    // })
+export async function register(req, res) {
+    try {
+        const data = req.body;
+
+        const errors = {};
+        if (!data.email) errors.email = "Email is required";
+        if (!data.password) errors.password = "Password is required";
+
+        if (Object.keys(errors).length > 0) {
+            return Err.validation(res, errors);
+        }
+
+        data.password = await GenerateHash(data.password);
+
+        const user = await userModel.createUser(data);
+
+        return ResponseOk(res, 201, true, "User registered successfully", {
+            user,
+        });
+
+    } catch (err) {
+        console.error(err);
+        ResponseErr(res, {
+            code: constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
+            message: err.message,
+            errors: constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
+        })
+    }
 }
