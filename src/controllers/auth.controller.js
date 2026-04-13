@@ -130,7 +130,7 @@ export async function requestForgotPasswordController(req, res) {
 
         const _ = await forgot_password.requestForgotPasswordModels(decoded?.id, generateKode());
 
-        return ResponseOk(res, 201, true, "User registered successfully", {});
+        return ResponseOk(res, 201, true, "Successfully Send Otp", {});
 
     } catch (err) {
         console.error(err);
@@ -142,3 +142,30 @@ export async function requestForgotPasswordController(req, res) {
     }
 }
 
+export async function resetPasswordController(req, res) {
+    try {
+        const { token, password } = req.body;
+
+        if (!token || !password) {
+            return ResponseErr(res, {
+                code: 400,
+                message: "Token and password are required",
+            })
+        }
+
+        const hashedPassword = await GenerateHash(password);
+
+        await forgot_password.resetPasswordByTokenModels(token, hashedPassword);
+
+        return res.status(200).json({
+            success: true,
+            message: "Password successfully reset"
+        });
+
+    } catch (error) {
+        return ResponseErr(res, {
+            code: 400,
+            message: error.message
+        })
+    }
+}

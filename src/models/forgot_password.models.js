@@ -12,9 +12,39 @@ export async function requestForgotPasswordModels(userId, token) {
     return requestForgotPassword
 }
 
-export async function resetPasswordByTokenModels(tokenForgotPassword) {
-    const queryResetPasswordByToken = ``
-    const resetPasswordByToken = await query(queryResetPasswordByToken, [tokenForgotPassword])
+export async function resetPasswordByTokenModels(token, newHashedPassword) {
+    try {
+        await query('BEGIN')
 
-    return resetPasswordByToken
+        const { rows } = await query(
+            `SELECT user_id 
+             FROM forgot_password 
+             WHERE token = $1 AND expires_at > NOW()
+             FOR UPDATE`,
+            [token]
+        )
+
+        if (rows.length === 0) {
+            throw new Error('Token invalid or expired')
+        }
+
+        const userId = rows[0].user_id
+
+        await query(
+            `UPDATE users SET password = $1 WHERE id = $2`,
+            [newHashedPassword, userId]
+        )
+
+        await query(
+            `DELETE FROM forgot_password WHERE token = $1`,
+            [token]
+        )
+
+        await query('COMMIT')
+
+        return true
+    } catch (error) {
+        await query('ROLLBACK')
+        throw error
+    }
 }
