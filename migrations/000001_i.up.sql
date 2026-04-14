@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     CONSTRAINT fk_product_order_items FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
 );
 
+
 CREATE TABLE IF NOT EXISTS carts (
     cart_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id INT UNIQUE,
