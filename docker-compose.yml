@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: yuuke
+    ports:
+      - "5431:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d yuuke"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  migrate:
+    image: migrate/migrate
+    volumes:
+      - ./migrations:/migrations
+    # entrypoint: ["migrate", "-path", "/migrations/", "-database", "postgres://user:pass@db:5432/dbname?sslmode=disable", "up"]
+    entrypoint: ["migrate", "-source", "file://./migrations", "-database", "postgres://postgres:1@db:5432/yuuke?sslmode=disable", "up"]
+    # migrate -source file://./migrations -database postgres://postgres:1@localhost:5432/yuuke?sslmode=disable up
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    build: .
+    container_name: express_app
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
