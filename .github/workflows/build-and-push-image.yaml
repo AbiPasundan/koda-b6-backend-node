@@ -47,4 +47,4 @@ jobs:
           script: |
             cd server-wildan-node-backend
             docker compose pull app
-            docker compose up backend -d
+            docker compose up app -d
