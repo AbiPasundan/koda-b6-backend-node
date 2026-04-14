@@ -40,11 +40,11 @@ jobs:
       - name: "[SERVER] pull image from ghcr.io"
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
+          host: ${{ secrets.HOST }} # 68
+          username: ${{ secrets.USERNAME }} # wildan
+          key: ${{ secrets.KEY }} # ~/.ssh/id_rsa
+          port: ${{ secrets.PORT }} # 22
           script: |
             cd server-wildan-node-backend
-            docker compose pull backend
+            docker compose pull app
             docker compose up backend -d
