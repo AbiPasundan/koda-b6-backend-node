@@ -104,6 +104,8 @@ Before installing and running the project, ensure you have the following:
 
 ## 📦 Installation
 
+### Clone
+
 To install the project, follow these steps:
 
 ```bash
@@ -118,6 +120,16 @@ npm i
 
 # Start the application
 npm run node
+```
+
+### Use docker compose
+
+if you have docker you can run this project with docker compose
+
+just run
+
+```bash
+docker-compose up
 ```
 
 ## 💻 Usage
