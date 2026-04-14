@@ -32,8 +32,15 @@ services:
     container_name: express_app
     ports:
       - "3001:3000"
-    env_file:
-      - .env
+    environment:
+      - PORT=3000
+      - PGHOST=db
+      - PGPORT=5432
+      - PGUSER=postgres
+      - PGPASSWORD=1
+      - PGSSLMODE=disable
+      - PGDATABASE=yuuke
+      - APP_SECRET=d8e8fca2dc0f896fd7cb4cb0031ba249
     depends_on:
       - db
 
