@@ -73,14 +73,21 @@ export async function updateProfile(req, res) {
                 message: "Unauthorized: Invalid token payload",
             });
         }
+        
+        const body = req.body || {};
 
-        let {full_name, email, password, address, phone, pictures} = req.body;
+        let full_name = body.full_name || null;
+        let email = body.email || null;
+        let password = body.password || null;
+        let address = body.address || null;
+        let phone = body.phone || null;
+        let pictures = req.file ? req.file.filename : null;
 
         if (password) {
             password = await GenerateHash(password);
         }
 
-        const user = await profileModel.updateProfile(full_name ?? null, email ?? null, password ?? null, address ?? null, phone ?? null, pictures ?? null, decoded.id);
+        const user = await profileModel.updateProfile(full_name, email, password, address, phone, pictures, decoded.id);
 
         if (!user) {
             return res.status(501).json({

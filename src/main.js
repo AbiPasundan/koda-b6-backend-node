@@ -6,9 +6,11 @@ import corsOptions from "#/middleware/cors.middleware.js"
 const app = express()
 
 app.use(express.json())
+// app.use('/api', Anyroute)
 
 app.use("", mainRouter)
 app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3001
 

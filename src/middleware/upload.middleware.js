@@ -1,35 +1,51 @@
-import constants from "http2";
 import multer from "multer";
-import { customAlphabet, nanoid } from "nanoid";
+import path from "path";
+import { customAlphabet } from "nanoid";
+import fs from "fs";
 
-const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10)
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
 
-const storage = path => multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path || './src/lib')
-    },
-    filename: function (req, file, cb) {
-        const newFile = nanoid()
-        const ext = path.extname(file.originalname);
-        cb(null, `${newFile}.${ext}`)
-    }
-})
+if (!fs.existsSync("./uploads")) {
+    fs.mkdirSync("./uploads", { recursive: true });
+}
 
-export default function uploadMiddleware(path) {
+const storage = (uploadPath = "./uploads") =>
+    multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, uploadPath);
+        },
+        filename: (req, file, cb) => {
+            const id = nanoid();
+            const ext = path.extname(file.originalname);
+            cb(null, `${id}${ext}`);
+        }
+    });
+
+export default function uploadMiddleware(uploadPath) {
     return multer({
-        storage: storage(path),
+        storage: storage(uploadPath),
         limits: {
             fileSize: 10 * 1024 * 1024
         },
         fileFilter: (req, file, cb) => {
-            // const ext = file.originalname.split('.').pop()
+            const allowedMimeTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/jpg"
+            ];
+
             const ext = path.extname(file.originalname).toLowerCase();
-            const allowedTypes = /jpeg|jpg|png/;
-            const mimeType = allowedTypes.test(file.mimetype);
-            if (mimeType && allowedTypes.test(ext)) {
+
+            const allowedExt = [".jpg", ".jpeg", ".png"];
+
+            if (
+                allowedMimeTypes.includes(file.mimetype) &&
+                allowedExt.includes(ext)
+            ) {
                 return cb(null, true);
             }
-            cb(new Error("Error: File type not supported!"));
+
+            cb(new Error("File type not supported! Only JPG, JPEG, PNG allowed."));
         }
-    })
+    });
 }
