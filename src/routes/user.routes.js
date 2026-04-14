@@ -64,23 +64,41 @@ userRouter.use("/", auth(), userRoutes)
  *         description: Unauthorized
  *       500:
  *         description: Internal server error
- *   put:
+ * /update-profile:
+ *   patch:
  *     tags:
  *       - User Profile
  *     summary: Update user profile
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       required: true
+ *       required: false
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               full_name:
  *                 type: string
- *               phone_number:
+ *                 description: Leave empty to keep existing data
+ *               email:
  *                 type: string
+ *                 format: email
+ *                 description: Leave empty to keep existing data
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: Leave empty to keep existing data
+ *               address:
+ *                 type: string
+ *                 description: Leave empty to keep existing data
+ *               phone:
+ *                 type: string
+ *                 description: Leave empty to keep existing data
+ *               pictures:
+ *                 type: string
+ *                 format: binary
+ *                 description: Profile picture upload. Leave empty to keep existing data
  *     responses:
  *       200:
  *         description: Successfully updated user profile
