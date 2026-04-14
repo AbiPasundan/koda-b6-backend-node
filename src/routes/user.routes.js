@@ -90,6 +90,64 @@ userRouter.use("/", auth(), userRoutes)
  *         description: Unauthorized
  *       500:
  *         description: Internal server error
+ * /request-forgot-password:
+ *   post:
+ *     tags:
+ *       - User Profile
+ *     summary: Request a password reset
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *     responses:
+ *       200:
+ *         description: Password reset request sent successfully
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ * /forgot-password:
+ *   post:
+ *     tags:
+ *       - User Profile
+ *     summary: Reset forgotten password
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - otp
+ *               - new_password
+ *             properties:
+ *               otp:
+ *                 type: string
+ *                 example: "123456"
+ *               new_password:
+ *                 type: string
+ *                 format: password
+ *                 example: "newpassword123"
+ *     responses:
+ *       200:
+ *         description: Password successfully reset
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  */
 userRouter.use("/", auth(), profileRoutes)
 
