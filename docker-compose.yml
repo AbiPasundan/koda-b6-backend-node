@@ -20,15 +20,13 @@ services:
     image: migrate/migrate
     volumes:
       - ./migrations:/migrations
-    # entrypoint: ["migrate", "-path", "/migrations/", "-database", "postgres://user:pass@db:5432/dbname?sslmode=disable", "up"]
     entrypoint: ["migrate", "-source", "file://./migrations", "-database", "postgres://postgres:1@db:5432/yuuke?sslmode=disable", "up"]
-    # migrate -source file://./migrations -database postgres://postgres:1@localhost:5432/yuuke?sslmode=disable up
     depends_on:
       db:
         condition: service_healthy
 
   app:
-    build: .
+    image: ghcr.io/abipasundan/koda-b6-backend:latest
     container_name: express_app
     ports:
       - "3001:3000"
