@@ -1,4 +1,4 @@
-
+import cors from "cors";
 import express from "express"
 import mainRouter from "./routes/main.routes.js"
 import corsOptions from "#/middleware/cors.middleware.js"
@@ -17,5 +17,3 @@ app.listen(PORT, () => {
 })
 
 export default app;
-
-// buat folder dto untuk standar response dan request
