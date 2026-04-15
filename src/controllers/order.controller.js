@@ -4,16 +4,9 @@ import jwt from "jsonwebtoken";
 
 
 export async function getOrderController(req, res) {
-    const authHeader = req.headers['authorization'];
+    const user = res.locals.user
 
-    const token = authHeader && authHeader.split(' ')[1];
-    const decode = jwt.decode(token)
-    const { id } = decode
-    console.log(decode);
-    console.log(id);
-
-
-    const { rows } = await orderModel.getOrdersModels(id)
+    const { rows } = await orderModel.getOrdersModels(user.id)
 
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 5
