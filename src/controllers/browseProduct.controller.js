@@ -1,5 +1,5 @@
 import * as browseProduct from "#/models/browseProduct.models.js"
-import ResponseOk, { ResponseErr404 } from "#/helper/response.helper.js";
+import ResponseOk, { ResponseErr404, ResponseErr500 } from "#/helper/response.helper.js";
 import redisClient from "#/lib/redis.js";
 
 export async function getBrowseController(req, res) {
@@ -38,7 +38,13 @@ export async function getBrowseController(req, res) {
         ]);
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return ResponseErr500(res, {
+            error,
+            links: [
+                { rel: "self", href: "/browseproducts", method: "GET" },
+            ]
+        });
+        // res.status(500).json({ message: error.message });
     }
 }
 
