@@ -99,7 +99,7 @@ export async function addToCartController(req, res) {
             { rel: "self", href: "/detailproduct/addcart", method: "POST" },
         ]);
     } catch (error) {
-        return ResponseErr400(res, {
+        return ResponseErr500(res, {
             errors: "bad request",
             links: [
                 { rel: "self", href: "/detailproduct/addcart" },

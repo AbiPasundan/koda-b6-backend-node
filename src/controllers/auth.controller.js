@@ -4,7 +4,7 @@ import { GenerateHash, VerifyHash } from "#/lib/hash.js"
 import { generateToken } from "#/lib/jwt.js"
 import * as userModel from "#/models/users.models.js"
 import * as forgot_password from "#/models/forgot_password.models.js"
-import ResponseOk, { ResponseErr } from "#/helper/response.helper.js"
+import ResponseOk, { ResponseErr, ResponseErr400, ResponseErr500 } from "#/helper/response.helper.js"
 
 /**
  * 
@@ -87,9 +87,11 @@ export async function register(req, res) {
 
         const user = await userModel.createUser(data);
 
-        return ResponseOk(res, 201, true, "User registered successfully", {
-            user,
-        });
+        return ResponseOk(res, 201, "User registered successfully", user,
+            [
+                { rel: "self", href: `/auth/register`, method: "POST" },
+                { rel: "login", href: "/auth/login", method: "POST" },
+            ]);
 
     } catch (err) {
         console.error(err);
@@ -147,25 +149,28 @@ export async function resetPasswordController(req, res) {
         const { token, password } = req.body;
 
         if (!token || !password) {
-            return ResponseErr(res, {
-                code: 400,
-                message: "Token and password are required",
-            })
+            return ResponseErr400(res, {
+                errors: "Token and password are required",
+                links: [
+                    { rel: "self", href: "/reset-password", method: "POST" },
+                ]
+            });
         }
 
         const hashedPassword = await GenerateHash(password);
 
         await forgot_password.resetPasswordByTokenModels(token, hashedPassword);
 
-        return res.status(200).json({
-            success: true,
-            message: "Password successfully reset"
-        });
+        return ResponseOk(res, 201, "Password successfully reset", null, [
+            { rel: "self", href: "/reset-password", method: "POST" },
+        ]);
 
     } catch (error) {
-        return ResponseErr(res, {
-            code: 400,
-            message: error.message
-        })
+        return ResponseErr500(res, {
+            error,
+            links: [
+                { rel: "self", href: "/reset-password", method: "POST" },
+            ]
+        });
     }
 }

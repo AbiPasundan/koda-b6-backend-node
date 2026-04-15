@@ -42,24 +42,64 @@ export async function getUserById(id) {
  * @param {User} data
 */
 export async function createUser(data) {
-    const register = await query("SELECT * FROM users WHERE email = $1", [data.email]);
+    try {
+        await query('BEGIN');
 
-    if(register.rows.length > 0){
-        throw new Error("Email already registered");
+        const register = await query(
+            "SELECT * FROM users WHERE email = $1",
+            [data.email]
+        );
+
+        if (register.rows.length > 0) {
+            throw new Error("Email already registered");
+        }
+
+        const queryRegister = `INSERT INTO users (full_name, email, password, role_id, address, phone, pictures) VALUES ($1, $2, $3, $4, 'your address', '081230000', 'https://i.pravatar.cc') RETURNING *`;
+        // const queryInsertImage = `INSERT INTO users (full_name, email, password, role_id) VALUES ($1, $2, $3, $4) RETURNING *`;
+
+        const val = [
+            data.full_name,
+            data.email,
+            data.password,
+            2,
+        ];
+
+        const newUser = await query(queryRegister, val);
+
+        await query('COMMIT');
+
+        return newUser.rows[0];
+
+    } catch (error) {
+        await query('ROLLBACK');
+        throw error;
     }
-
-    const queryRegister = `INSERT INTO users (full_name, email, password, role_id) VALUES ($1, $2, $3, $4)`
-
-    const val = [
-        data.full_name,
-        data.email,
-        data.password,
-        2,
-    ]
-
-    const newUser = await query(queryRegister, val)
-    return newUser.rows[0];
 }
+// export async function createUser(data) {
+
+//     try {
+//         await query('BEGIN')
+
+//         const register = await query("SELECT * FROM users WHERE email = $1", [data.email]);
+//         if (register.rows.length > 0) {
+//             throw new Error("Email already registered");
+//         }
+
+//         const queryRegister = `INSERT INTO users (full_name, email, password, role_id) VALUES ($1, $2, $3, $4)`
+
+//         const val = [
+//             data.full_name,
+//             data.email,
+//             data.password,
+//             2,
+//         ]
+
+//         const newUser = await query(queryRegister, val)
+//         return newUser.rows[0];
+//     } catch (error) {
+
+//     }
+// }
 
 // /**
 //  * 
