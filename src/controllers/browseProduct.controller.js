@@ -1,14 +1,30 @@
 import * as browseProduct from "#/models/browseProduct.models.js"
+import ResponseOk from "#/helper/response.helper.js";
 
+// export const getProducts = async (req, res) => {
 export async function getBrowseController(req, res) {
-    const { rows } = await browseProduct.browseProductModels()
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
 
-    return res.json({
-        success: true,
-        message: "All Product",
-        result: rows
-    })
-}
+        const products = await browseProduct.browseProductModels(page, limit);
+
+        ResponseOk(res, 200, true, "success get data product", products.rows)
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+// export async function getBrowseController(req, res) {
+//     const { rows } = await browseProduct.browseProductModels()
+
+//     return res.json({
+//         success: true,
+//         message: "All Product",
+//         result: rows
+//     })
+// }
 
 export async function getDetailProductController(req, res) {
     const { id: idStr } = req.params;

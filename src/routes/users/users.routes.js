@@ -5,9 +5,10 @@ import { checkoutCartController, getOrderController } from "#/controllers/order.
 
 const userRoutes = Router()
 
-userRoutes.post("/detailproduct/addcart", addToCartController)
-userRoutes.post("/checkout", checkoutCartController)
 userRoutes.get("/detailproduct/addcart/:id", getCartController)
 userRoutes.get("/historyorder", getOrderController)
+userRoutes.post("/detailproduct/addcart", addToCartController)
+userRoutes.post("/checkout", checkoutCartController)
+// userRoutes.post("/checkout", addOrderHandler)
 
 export default userRoutes;

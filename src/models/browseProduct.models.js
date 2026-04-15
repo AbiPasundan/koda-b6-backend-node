@@ -5,25 +5,28 @@ const query = async (text, params) => {
 	return dbs.query(text, params)
 }
 
+export async function browseProductModels(page = 1, limit = 10) {
+	const offset = (page - 1) * limit;
 
-export async function browseProductModels() {
 	const queryBrowseProductModels = `
-        select
-            id,
-            product_name,
-            product_desc,
-            price,
-            quantity,
-            discount,
-            discount.is_flash_sale
-        from products
-        left join discount on products.id = discount.discount_id
-    `
-	const browseProduct = await query(queryBrowseProductModels)
+        SELECT 
+            id, 
+            product_name, 
+            product_desc, 
+            price, 
+            quantity, 
+            discount, 
+            is_flash_sale 
+        FROM products p
+        LEFT JOIN discount d ON p.id = d.discount_id
+        ORDER BY p.id ASC
+        LIMIT $1 OFFSET $2
+    `;
 
-	return browseProduct
+	const browseProduct = await query(queryBrowseProductModels, [limit, offset]);
+
+	return browseProduct;
 }
-
 export async function detailProductModels(id) {
 	const queryDetailProductModels = `
     SELECT
