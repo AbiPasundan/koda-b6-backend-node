@@ -81,3 +81,27 @@ export function ResponseErr500(res, { error, links = [] }) {
         }, {})
     });
 }
+
+/**
+ * Send response error 400 with HATEOAS standar.
+ * 
+ * @param {Object} res - Objek response Express
+ * @param {Object} options - Detail error
+ * @param {Error|string} options.error - Objek error.
+ * @param {Array} options.links - Array object link { rel, href }.
+ */
+export function ResponseErr400(res, { error, links = [] }) {
+    res.setHeader('Content-Type', 'application/problem+json');
+
+    return res.status(400).json({
+        type: "https://httpstatuses.com",
+        title: "Bad Request",
+        status: 400,
+        detail: (error?.message || error || "The request could not be understood or was missing required parameters."),
+        instance: res.req.originalUrl,
+        _links: links.reduce((acc, link) => {
+            acc[link.rel] = { href: link.href };
+            return acc;
+        }, {})
+    });
+}
