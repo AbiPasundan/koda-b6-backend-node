@@ -9,7 +9,7 @@ const userRoutes = Router()
 
 userRoutes.get("/profile", getProfile)
 userRoutes.post("/request-forgot-password", requestForgotPasswordController)
-userRoutes.post("/forgot-password", resetPasswordController)
+userRoutes.post("/reset-password", resetPasswordController)
 userRoutes.patch("/update-profile", uploadMiddleware().single("pictures"), updateProfile)
 
 export default userRoutes;
