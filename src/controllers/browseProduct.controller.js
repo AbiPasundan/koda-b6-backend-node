@@ -1,18 +1,38 @@
 import * as browseProduct from "#/models/browseProduct.models.js"
 import ResponseOk from "#/helper/response.helper.js";
+import redisClient from "#/lib/redis.js";
 
 export async function getBrowseController(req, res) {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
 
+        const cacheKey = `products:page=${page}:limit=${limit}`;
+
+        const cachedData = await redisClient.get(cacheKey);
+
+        if (cachedData) {
+            return res.status(200).json({
+                success: true,
+                message: "success get data product (cache)",
+                data: JSON.parse(cachedData)
+            });
+        }
+
         const products = await browseProduct.browseProductModels(page, limit);
 
-        ResponseOk(res, 200, true, "success get data product", products.rows)
+        await redisClient.setEx(
+            cacheKey,
+            900,
+            JSON.stringify(products.rows)
+        );
+
+        ResponseOk(res, 200, true, "success get data product", products.rows);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
+}
 
 export async function getDetailProductController(req, res) {
     const { id: idStr } = req.params;
