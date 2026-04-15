@@ -7,8 +7,6 @@ import { db } from "../lib/db.js"
  * @property {string} password
 */
 
-
-
 const query = async (text, params) => {
     const dbs = await db()
     return dbs.query(text, params)
@@ -17,6 +15,12 @@ const query = async (text, params) => {
 /**
  * @type {User[]}
 */
+
+export async function userCredential(user_id) {
+    const getUser = await query("select users.*, role.name from users join role on users.role_id = role.id where users.id = $1;", [user_id])
+
+    return getUser
+}
 
 export async function getAllUsers() {
     const getAllUsers = await query("SELECT * FROM users")
@@ -64,7 +68,8 @@ export async function createUser(data) {
 // */
 
 export async function getUserByEmail(email, cb) {
-    const result = await query("SELECT * FROM users WHERE email = $1", [email])
+    // select users.*, role.name from users join role on users.role_id = role.id where users.email = $1
+    const result = await query("SELECT users.*, role.name AS role_name FROM users JOIN role ON users.role_id = role.id WHERE email = $1", [email])
     if (result.rows.length === 1) {
         const user = result.rows[0]
         if (cb) {

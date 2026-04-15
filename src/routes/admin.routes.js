@@ -1,6 +1,7 @@
 import { Router } from "express";
 import userRouter from "#/routes/admin/users.routes.js";
 import productsRouter from "#/routes/admin/products.routes.js";
+import auth from "#/middleware/auth.middleware.js";
 
 const adminRouter = Router()
 
@@ -130,7 +131,7 @@ const adminRouter = Router()
  *         description: Internal server error
  * 
 */
-adminRouter.use("/admin", userRouter)
+adminRouter.use("/admin", auth("admin"), userRouter)
 /**
  * 
  * @openapi
@@ -160,6 +161,6 @@ adminRouter.use("/admin", userRouter)
  *         description: Internal server error
  * 
 */
-adminRouter.use("/admin", productsRouter)
+adminRouter.use("/admin", auth("admin"), productsRouter)
 
 export default adminRouter

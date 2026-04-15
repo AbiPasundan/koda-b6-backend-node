@@ -1,7 +1,6 @@
 import * as browseProduct from "#/models/browseProduct.models.js"
 import ResponseOk from "#/helper/response.helper.js";
 
-// export const getProducts = async (req, res) => {
 export async function getBrowseController(req, res) {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -14,17 +13,6 @@ export async function getBrowseController(req, res) {
         res.status(500).json({ message: error.message });
     }
 };
-
-
-// export async function getBrowseController(req, res) {
-//     const { rows } = await browseProduct.browseProductModels()
-
-//     return res.json({
-//         success: true,
-//         message: "All Product",
-//         result: rows
-//     })
-// }
 
 export async function getDetailProductController(req, res) {
     const { id: idStr } = req.params;

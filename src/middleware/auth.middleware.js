@@ -23,13 +23,9 @@ export default function auth(requiredRole = null) {
         }
 
         const token = authHeader.slice(prefix.length)
-        console.log(token);
-        
 
         try {
             const payload = verifyToken(token)
-            console.log(payload);
-
             if (!payload) {
                 return res.status(403).json({
                     success: false,
@@ -39,7 +35,7 @@ export default function auth(requiredRole = null) {
             }
 
             res.locals.user = payload
-            if (requiredRole && payload.role !== requiredRole) {
+            if (requiredRole && payload.role_name !== requiredRole) {
                 return res.status(403).json({
                     success: false,
                     message: "Forbidden: insufficient role",
