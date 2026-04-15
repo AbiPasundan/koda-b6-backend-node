@@ -4,7 +4,7 @@ import { GenerateHash, VerifyHash } from "#/lib/hash.js"
 import { generateToken } from "#/lib/jwt.js"
 import * as userModel from "#/models/users.models.js"
 import * as forgot_password from "#/models/forgot_password.models.js"
-import ResponseOk, { ResponseErr, ResponseErr400, ResponseErr500 } from "#/helper/response.helper.js"
+import ResponseOk, { ResponseErr, ResponseErr400, ResponseErr409, ResponseErr500 } from "#/helper/response.helper.js"
 
 /**
  * 
@@ -49,10 +49,16 @@ export async function login(req, res) {
 
         const { password: _, ...userWithoutPassword } = user
 
-        ResponseOk(res, constants.HTTP_STATUS_OK, true, "Login successful", {
+        const result = {
             ...userWithoutPassword,
             token
-        })
+        }
+
+        return ResponseOk(res, 200, "Login successful", result,
+            [
+                { rel: "self", href: `/auth/login`, method: "POST" },
+                { rel: "register", href: "/auth/register", method: "POST" },
+            ]);
     } catch (error) {
         console.log(error);
         console.log(error.message);
@@ -93,13 +99,14 @@ export async function register(req, res) {
                 { rel: "login", href: "/auth/login", method: "POST" },
             ]);
 
-    } catch (err) {
-        console.error(err);
-        ResponseErr(res, {
-            code: constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-            message: err.message,
-            errors: constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-        })
+    } catch (error) {
+        console.error(error); //409
+        return ResponseErr409(res, {
+            error,
+            links: [
+                { rel: "self", href: "auth/register", method: "POST" },
+            ]
+        });
     }
 }
 

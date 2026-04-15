@@ -105,3 +105,27 @@ export function ResponseErr400(res, { error, links = [] }) {
         }, {})
     });
 }
+
+/**
+ * Send response error 409 with HATEOAS standar.
+ * 
+ * @param {Object} res - Objek response Express
+ * @param {Object} options - Detail error
+ * @param {Error|string} options.error - Objek error.
+ * @param {Array} options.links - Array object link { rel, href }.
+ */
+export function ResponseErr409(res, { error, links = [] }) {
+    res.setHeader('Content-Type', 'application/problem+json');
+
+    return res.status(409).json({
+        type: "https://httpstatuses.com",
+        title: "Conflict",
+        status: 409,
+        detail: (error?.message || error || "DUPLICATE_EMAIL."),
+        instance: res.req.originalUrl,
+        _links: links.reduce((acc, link) => {
+            acc[link.rel] = { href: link.href };
+            return acc;
+        }, {})
+    });
+}
