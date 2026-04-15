@@ -311,9 +311,104 @@ So I can open [http://localhost:3001]
 
 ## EndPoint
 
-Easy way to see endpoint is test with swagger you can access swagger docs in [http://localhost:3001/docs]
+The easiest way to explore and test all available endpoints is via Swagger documentation: [http://localhost:3001/docs](http://localhost:3001/docs)
 
-but here is list of endpoint in this project
+Swagger provides an interactive interface where you can send requests and inspect responses directly.
+
+---
+
+### Available Endpoints
+
+Below is a summary of the main endpoints in this project:
+
+---
+
+### Auth
+
+| Method | Endpoint                   | Description             |
+| ------ | ---------------------------| -----------------       |
+| POST   | `/auth/login`              | Login user              |
+| POST   | `/auth/register`           | Register new user       |
+| POST   | `/reset-password`          | Reset password          |
+| POST   | `/request-forgot-password` | Resquest forgot password|
+
+---
+
+### Landing Page Routes
+
+| Method | Endpoint             | Description            |
+| ------ | -------------------- | ---------------------- |
+| GET    | `/products/home`     | Get testimoni product  |
+| GET    | `/products/reviews`  | Get recomended product |
+
+### Browse Product Pages Routes
+
+| Method | Endpoint             | Description                        |
+| ------ | -------------------- | ---------------------------------- |
+| GET    | `/browseproducts`    | Get product all product limit 10   |
+| GET    | `/detailproduct/:id` | Get detail product by id from prams|
+
+### Users
+
+| Method | Endpoint                         | Description          |
+| ------ | -------------------------------- | --------------       |
+| GET    | `/profile`                       | Get data profile user|
+| GET    | `/detailproduct/addcart/:id`     | Get cart user by id  |
+| GET    | `/historyorder`                  | Get history order    |
+| PUT    | `/detailproduct/addcart`         | add to cart          |
+| DELETE | `/checkout`                      | Checkout cart        |
+
+### Users Admin Access
+
+| Method | Endpoint           | Description    |
+| ------ | -------------------| -------------- |
+| GET    | `/admin/users`     | Get all users  |
+| GET    | `/admin/users/:id` | Get user by ID |
+| PUT    | `/admin/users/:id` | Update user    |
+| DELETE | `/admin/users/:id` | Delete user    |
+
+---
+
+### Products Admin Access
+
+| Method | Endpoint              | Description        |
+| ------ | ----------------------| ------------------ |
+| GET    | `/admin/products`     | Get all products   |
+| GET    | `/admin/products/:id` | Get product detail |
+| POST   | `/admin/products`     | Create product     |
+| PUT    | `/admin/products/:id` | Update product     |
+| DELETE | `/admin/products/:id` | Delete product     |
+
+---
+
+### Orders Admin Access
+
+| Method | Endpoint            | Description      |
+| ------ | ------------------- | ---------------- |
+| POST   | `/admin/orders`     | Create new order |
+| GET    | `/admin/orders`     | Get user orders  |
+| GET    | `/admin/orders/:id` | Get order detail |
+
+---
+
+## 📎 Notes
+
+- All protected routes require authentication using JWT
+- Include token in header:
+
+```http
+Authorization: Bearer <your_token>
+```
+
+- Response format follows a consistent structure:
+
+```json
+{
+  "success": true,
+  "message": "Request successful",
+  "result": {}
+}
+```
 
 ## 🤝 Contributing
 
