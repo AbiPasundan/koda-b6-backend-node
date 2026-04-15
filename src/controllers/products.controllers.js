@@ -1,32 +1,32 @@
 
 import * as productsModel from "#/models/products.models.js"
+import invalidateProductCache from "#/helper/invalidateRedis.helper.js"
+import ResponseOk, { ResponseErr } from "#/helper/response.helper.js"
 
 export async function getAllProducts(req, res) {
-    const { rows } = await productsModel.getAllProducts()
+    let page = parseInt(req.query.page);
+    let limit = parseInt(req.query.limit);
 
-    const page = parseInt(req.query.page) || 1
-    const limit = parseInt(req.query.limit) || 5
-    const offset = (page - 1) * limit
-    const users = rows.slice(offset, offset + limit)
+    page = (isNaN(page) || page < 1) ? 1 : page;
+    limit = (isNaN(limit) || limit < 1) ? 10 : limit;
 
-    return res.json({
-        success: true,
-        message: "All users",
-        result: users
-    })
+    const offset = (page - 1) * limit;
+
+    try {
+        const rows = await productsModel.getAllProducts(limit, offset);
+        
+        ResponseOk(res, 200, true, "All Product", rows);
+    } catch (error) {
+        ResponseErr(res, 500, false, "Internal Server Error");
+    }
 }
-
 
 export async function getProductById(req, res) {
     const { id: idStr } = req.params
     const id = parseInt(idStr)
-    const data = await productsModel.getProductById(id)
     try {
-        res.status(200).json({
-            success: true,
-            message: "Product found",
-            result: data
-        })
+        const data = await productsModel.getProductById(id)
+        ResponseOk(res, 200, true, "Product found", data)
     } catch (error) {
         res.status(404).json({
             success: false,
@@ -39,24 +39,20 @@ export async function getProductById(req, res) {
 export async function createProduct(req, res) {
     const data = req.body
     const product = await productsModel.createProducts(data)
-    res.status(201).json({
-        success: true,
-        message: "Product created",
-        result: product
-    })
-}
 
-// 
+    await invalidateProductCache();
+
+    ResponseOk(res, 201, true, "Product Created", product)
+}
 
 export async function deleteProduct(req, res) {
     try {
         const id = parseInt(req.params.id)
         const product = await productsModel.deleteProduct(id)
-        res.json({
-            success: true,
-            message: "Product Deleted",
-            result: product
-        })
+
+        await invalidateProductCache();
+
+        ResponseOk(res, 204, true, "Product deleted", product)
     } catch (error) {
         res.status(404).json({
             success: false,

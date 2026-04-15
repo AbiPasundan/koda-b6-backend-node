@@ -6,10 +6,10 @@ const query = async (text, params) => {
 }
 
 
-export async function getAllProducts() {
-    const getProducts = await query("SELECT * FROM products")
+export async function getAllProducts(limit, offset) {
+    const getProducts = await query("SELECT * FROM products LIMIT $1 OFFSET $2", [limit, offset])
 
-    return getProducts
+    return getProducts.rows
 }
 
 export async function getProductById(id) {
