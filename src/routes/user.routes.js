@@ -46,7 +46,7 @@ const userRouter = Router()
  *       400:
  *         description: Failed to add to cart
  */
-userRouter.use("/", auth("user" || "admin"), userRoutes)
+userRouter.use("/", auth(["user", "admin"]), userRoutes)
 
 /**
  * @openapi
@@ -167,6 +167,6 @@ userRouter.use("/", auth("user" || "admin"), userRoutes)
  *       500:
  *         description: Internal server error
  */
-userRouter.use("/", auth("user" || "admin"), profileRoutes)
+userRouter.use("/", auth(["user", "admin"]), profileRoutes)
 
 export default userRouter
