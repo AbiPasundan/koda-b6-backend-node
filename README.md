@@ -6,23 +6,23 @@
 
 ## 📋 Table of Contents
 
-1. [Description](#L35)
+1. [Description](#-description)
 
-2. [Demo/Screenshots](#L39)
+2. [Demo/Screenshots](#-demoscreenshots)
 
-3. [Features](#L43)
+3. [Features](#-major-features)
 
-4. [Tech Stack](#L51)
+4. [Tech Stack](#-tech-stack)
 
-5. [Project Structure](#L60)
+5. [Project Structure](#-project-structure)
 
-6. [Prerequisites](#L71)
+6. [Prerequisites](#-prerequisites)
 
-7. [Installation](#L79)
+7. [Installation](#-how-to-use)
 
-8. [Contributing](#L101)
+8. [Contributing](#-contributing)
 
-9. [License](#L105)
+9. [License](#-license)
 
 ## 📄 Description
 
