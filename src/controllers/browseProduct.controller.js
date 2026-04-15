@@ -1,5 +1,5 @@
 import * as browseProduct from "#/models/browseProduct.models.js"
-import ResponseOk, { ResponseErr404, ResponseErr500 } from "#/helper/response.helper.js";
+import ResponseOk, { ResponseErr400, ResponseErr404, ResponseErr500 } from "#/helper/response.helper.js";
 import redisClient from "#/lib/redis.js";
 
 export async function getBrowseController(req, res) {
@@ -44,7 +44,6 @@ export async function getBrowseController(req, res) {
                 { rel: "self", href: "/browseproducts", method: "GET" },
             ]
         });
-        // res.status(500).json({ message: error.message });
     }
 }
 
@@ -53,9 +52,11 @@ export async function getDetailProductController(req, res) {
     const id = parseInt(idStr, 10);
 
     if (isNaN(id)) {
-        return res.status(400).json({
-            success: false,
-            message: "Invalid product ID format",
+        return ResponseErr400(res, {
+            errors: "Invalid product ID format",
+            links: [
+                { rel: "self", href: "/detailproduct/addcart" },
+            ]
         });
     }
 
@@ -81,10 +82,11 @@ export async function getDetailProductController(req, res) {
 
     } catch (error) {
         console.error("Database Error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Internal server error",
-            result: error.message
+        return ResponseErr500(res, {
+            error,
+            links: [
+                { rel: "self", href: "/detailproduct/${id}", method: "GET" },
+            ]
         });
     }
 }
@@ -93,17 +95,16 @@ export async function addToCartController(req, res) {
     const data = req.body
     try {
         const user = await browseProduct.addToCartModels(data)
-        res.status(201).json({
-            success: true,
-            message: "Success Add to cart",
-            result: user
-        })
+        return ResponseOk(res, 200, "Success Add to cart", user, [
+            { rel: "self", href: "/detailproduct/addcart", method: "POST" },
+        ]);
     } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message || "Failed to add to cart",
-            result: null
-        })
+        return ResponseErr400(res, {
+            errors: "bad request",
+            links: [
+                { rel: "self", href: "/detailproduct/addcart" },
+            ]
+        });
     }
 }
 
@@ -112,34 +113,36 @@ export async function getCartController(req, res) {
     const id = parseInt(idStr, 10);
 
     if (isNaN(id)) {
-        return res.status(400).json({
-            success: false,
-            message: "Invalid product ID format",
+        return ResponseErr400(res, {
+            errors: "Invalid product ID format",
+            links: [
+                { rel: "self", href: "/detailproduct/addcart/:id", method: "GET" },
+            ]
         });
     }
-
     try {
         const { rows } = await browseProduct.getCartModels(id);
 
         if (!rows || rows.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "Product not found",
+            return ResponseErr404(res, {
+                errors: "Product not found",
+                links: [
+                    { rel: "self", href: "/detailproduct/addcart/:id", method: "GET" },
+                ]
             });
         }
 
-        res.status(200).json({
-            success: true,
-            message: "Product found",
-            result: rows
-        });
-
+        return ResponseOk(res, 200, "success get data cart", rows, [
+            { rel: "self", href: "/detailproduct/addcart/:id", method: "GET" },
+        ]);
     } catch (error) {
         console.error("Database Error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Internal server error",
-            result: error.message
+        const message = (error + "Internal server error")
+        return ResponseErr500(res, {
+            error: message,
+            links: [
+                { rel: "self", href: "/detailproduct/${id}", method: "GET" },
+            ]
         });
     }
 }
